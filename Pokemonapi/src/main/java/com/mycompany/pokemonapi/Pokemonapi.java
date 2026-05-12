@@ -1,16 +1,23 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-
 package com.mycompany.pokemonapi;
 
-/**
- *
- * @author Windows 11
- */
+
+import controlador.ApiControlador;
+import vista.ApiVista;
+
 public class Pokemonapi {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+
+        ApiVista vista =
+                new ApiVista();
+
+        ApiControlador controlador =
+                new ApiControlador(vista);
+
+        vista.setVisible(true);
     }
 }
