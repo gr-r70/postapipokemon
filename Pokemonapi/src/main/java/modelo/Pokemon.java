@@ -1,77 +1,58 @@
 package modelo;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Pokemon {
-
-    // atributos privados
     private String nombre;
+    private String poderes;
+    private String imagen;
     private int peso;
-    private List<String> habilidades;
-    private String imagenUrl;
+    private int altura;
 
-    // constructor recibe los dos JSONObject de cada endpoint de habilidad
-    // igual que Post recibe su JSONObject del endpoint de posts
-    public Pokemon(JSONObject jsonAbility1, JSONObject jsonAbility2) {
+    public Pokemon(JSONObject json) {
+        this.nombre = json.getString("name");
+        this.peso   = json.getInt("weight");
+        this.altura = json.getInt("height");
+        this.imagen = json.getJSONObject("sprites")
+                         .getJSONObject("other")
+                         .getJSONObject("official-artwork")
+                         .getString("front_default");
 
-        // nombre del pokemon
-        this.nombre = "ditto";
-
-        // peso de ditto en hectogramos
-        this.peso = 40;
-
-        // extraer el nombre de cada habilidad desde su propio endpoint
-        // https://pokeapi.co/api/v2/ability/7/   -> limber
-        // https://pokeapi.co/api/v2/ability/150/ -> imposter
-        this.habilidades = new ArrayList<>();
-        this.habilidades.add(jsonAbility1.getString("name"));
-        this.habilidades.add(jsonAbility2.getString("name"));
-
-        // imagen oficial usando el enlace solicitado
-        this.imagenUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/132.png";
+        JSONArray abilities = json.getJSONArray("abilities");
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < abilities.length(); i++) {
+            String habilidad = abilities.getJSONObject(i)
+                                        .getJSONObject("ability")
+                                        .getString("name");
+            sb.append(habilidad).append("\n");
+        }
+        this.poderes = sb.toString();
     }
 
-    public String getNombre() {
-        return nombre;
-    }
+    public String getNombre() { return nombre; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
+    public String getPoderes() { return poderes; }
+    public void setPoderes(String poderes) { this.poderes = poderes; }
 
-    public int getPeso() {
-        return peso;
-    }
+    public String getImagen() { return imagen; }
+    public void setImagen(String imagen) { this.imagen = imagen; }
 
-    public void setPeso(int peso) {
-        this.peso = peso;
-    }
+    public int getPeso() { return peso; }
+    public void setPeso(int peso) { this.peso = peso; }
 
-    public List<String> getHabilidades() {
-        return habilidades;
-    }
-
-    public void setHabilidades(List<String> habilidades) {
-        this.habilidades = habilidades;
-    }
-
-    public String getImagenUrl() {
-        return imagenUrl;
-    }
-
-    public void setImagenUrl(String imagenUrl) {
-        this.imagenUrl = imagenUrl;
-    }
+    public int getAltura() { return altura; }
+    public void setAltura(int altura) { this.altura = altura; }
 
     @Override
     public String toString() {
-        return "Pokemon{"
-                + "nombre=" + nombre
-                + ", peso=" + peso + " hg"
-                + ", habilidades=" + habilidades
-                + ", imagenUrl=" + imagenUrl
-                + "}";
+        return "Pokemon{" +
+                "nombre: " + nombre + ", " +
+                "altura: " + altura + ", " +
+                "peso: "   + peso   + ", " +
+                "poderes: "+ poderes+ ", " +
+                "imagen: " + imagen +
+               "}";
     }
 }
